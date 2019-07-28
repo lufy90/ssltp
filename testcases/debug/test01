@@ -1,3 +1,18 @@
 #!/bin/bash
 
-echo BLOCKDEV: $BLOCKDEV
+source stability.sh
+
+func1()
+{
+  chk_rpm_exists ssh sshdfc openssh-clients || return 65
+  return 0
+
+}
+
+
+func2()
+{
+steady 5 ls ./
+
+}
+runfunc func1

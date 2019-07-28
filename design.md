@@ -17,7 +17,14 @@ Structure:
   e. can execute independently
 
 * Run a function
-  Just same as running a testcase.
+  Echo the check point execute result: PASS|CONF|FAIL
+  Echo the count of the running check point
+
+* Test function
+  return 0  -- PASS
+  return 1-63  -- FAIL
+  return 64-127  -- CONF
+
 
 * Test results
     * Output
@@ -32,6 +39,7 @@ analysis=exit
 test_process: INFO: Timeout per run is 0h 05m 00s
 function_point1: FAIL: xxxxxxxxx
 function_point2: PASS: yyyyyyyyy
+fucntion_point3: CONF: zzzzzzzzz
 
 <<<execution_status>>>
 initiation_status="ok"

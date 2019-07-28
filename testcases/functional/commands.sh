@@ -25,6 +25,8 @@ cmds6="ls abcd"
 for i in $cmds1 $cmds2 $cmds3 $cmds4 $cmds5
 #for i in $cmds6
 do
+#command $i > /dev/null 2>&1
+
 which $i > /dev/null 2>&1
 rv=$?
 if [ $rv -ne 0 ]; then

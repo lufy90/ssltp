@@ -1,7 +1,10 @@
 #!/bin/bash
 
 
+export PATH=$PATH:${PWD}/lib
 source setting.sh
+source common.sh
+source test.sh
 
 usage()
 {
@@ -21,15 +24,33 @@ runtest()
 
   [ "${tag:0:1}" == "#" ] || \
   {
-    echo start: $tag
-    eval source $cmd
-    echo end: $tag
+    echo "<<<test_start>>>"
+    echo tag=$tag stime=
+    echo cmdline=$cmd
+    echo "<<<test_output>>>"
+    source $cmd
+    echo "<<<execution_status>>>"
+    echo "<<<test_end>>>"
   }
 }
 
-runfunc()
+
+runfunc1()
 {
-  :
+  local func=$1
+  local expectation=
+  local expect_rc=
+  local rs=
+  local rc=
+
+  shift
+  local args=$@
+  echo args: $args
+  rs=$($func $args 2>&1)
+  rc=$?
+  [ ${#rs} -ge 100 ] && rs="${rs::100} ..."
+  echo rc: $rc
+  echo rs: $rs
 
 }
 

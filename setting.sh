@@ -18,3 +18,5 @@ export FUNCTIMEOUT=100
 export BLOCKDEV="/dev/sdg5"
 export YUMREPO=
 
+export MNTPOINT=/tmp/ssltp_mntpoint
+export TMPDIR=/tmp/ssltp_tmpdir
