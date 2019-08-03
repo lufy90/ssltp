@@ -15,7 +15,7 @@ export SCENARIO_DIR=${SSLTPROOT}/scenarios
 # test variables
 export CASETIMEOUT=300
 export FUNCTIMEOUT=100
-export BLOCKDEV="/dev/sdg5"
+export BLOCKDEV="/dev/sdx1"
 export YUMREPO=
 
 export MNTPOINT=/tmp/ssltp_mntpoint

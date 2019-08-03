@@ -1,0 +1,67 @@
+#!/bin/bash
+# filesystem 
+# Author: lufei
+# Date: 2019年 08月 02日 星期五 15:56:45 CST
+# 
+
+source common.sh
+source test.sh
+
+blockdev=$BLOCKDEV
+mntpoint=$MNTPOINT
+tmp_dir=$TMPDIR
+
+clean(){
+  rm -rf $mntpoint
+  rm -rf $tmp_dir
+  umount $mntpoint
+}
+
+chk_fs(){
+  local t=$1
+
+  mkfs -t $t $blockdev 2> /dev/null || \
+    {
+      echo mkfs -t $t FAILED
+      return 1
+    }
+
+  mkdir -p $mntpoint
+  mount -t $t $blockdev $mntpoint || \
+    {
+      echo mount -t $t FAILED
+      return 2
+    }
+
+  mkdir -p $tmp_dir
+  dd if=/dev/zero of=$tmp_dir/test_file count=128 bs=1M || \
+    {
+      echo Create test file FAILED: $tmp_dir/test_file
+      clean
+      return 3
+    }
+
+  cp $tmp_dir/test_file $mntpoint/ || \
+    {
+      echo Copy test file FAILED.
+      clean
+      return 4
+    }
+  umount $mntpoint || \
+    {
+      echo umount $mntpoint FAILED.
+      clean
+      return 5
+    }
+
+  return 0
+}
+
+run_key_func "file -b $blockdev | grep block"
+runfunc chk_fs ext2
+runfunc chk_fs ext3
+runfunc chk_fs ext4
+runfunc chk_fs vfat
+runfunc chk_fs msdos
+
+echo can get here??

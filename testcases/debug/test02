@@ -1,0 +1,18 @@
+#!/bin/bash
+# test02 
+# Author: lufei
+# Date: 2019年 08月 02日 星期五 15:25:49 CST
+# 
+
+source common.sh
+source test.sh
+
+func1()
+{
+  chk_rpm_exists bash ppasdf
+  
+
+
+}
+
+runfunc chk_rpm_exists helo

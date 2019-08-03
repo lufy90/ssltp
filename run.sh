@@ -28,7 +28,7 @@ runtest()
     echo tag=$tag stime=
     echo cmdline=$cmd
     echo "<<<test_output>>>"
-    source $cmd
+    bash $cmd
     echo "<<<execution_status>>>"
     echo "<<<test_end>>>"
   }

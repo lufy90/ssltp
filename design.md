@@ -25,6 +25,14 @@ Structure:
   return 1-63  -- FAIL
   return 64-127  -- CONF
 
+** return 0 -- PASS, otherwise, FAIL
+
+** PASS: function returns 0
+   FAIL: 1. function returns none zero
+         2. function timeout
+
+
+
 
 * Test results
     * Output

@@ -1,10 +1,13 @@
 #!/bin/bash
 
+source common.sh
+source test.sh
 source stability.sh
 
 func1()
 {
-  chk_rpm_exists ssh sshdfc openssh-clients || return 65
+  chk_rpm_exists ssh sshdfc openssh-clients || return 0
+  echo if test get here??
   return 0
 
 }
@@ -15,4 +18,5 @@ func2()
 steady 5 ls ./
 
 }
-runfunc func1
+run_key_func func1
+runfunc func2
