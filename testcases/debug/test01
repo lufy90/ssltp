@@ -15,7 +15,7 @@ func1()
 
 func2()
 {
-steady 5 ls ./
+steady 5 ls ./ > /dev/null
 
 }
 run_key_func func1

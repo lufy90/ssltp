@@ -2,9 +2,7 @@
 # test.sh
 # functions for test framwork
 
-LOCALIPADDR=
-
-
+num=0
 runfunc()
 {
 # run functional point
@@ -12,7 +10,6 @@ runfunc()
 #   PASS for function return code 0, FAIL for function return others.
 
   local func=$1
-#  local func=abc
   shift
   local args="$@"
 
@@ -32,10 +29,9 @@ runfunc()
     *) rs=FAIL ;;
   esac
 
-  echo -e "${func}\t${rs}\t${rc}"
+  num=$((num+1))
+  echo -e "${num}\t${func}\t${rs}\t${rc}"
   return $rc
-#  echo rs: $rs
-
 }
 
 export -f runfunc

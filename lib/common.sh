@@ -15,8 +15,29 @@ chk_rpm_exists()
       }
     done
   [ $rc -le 255 ] || \
-    echo "WARNING: only count of NOT installed package(s) less than or equal to 255 could returned correctly."
+    {
+      echo "WARNING: return value is greater than 255"
+      rc=255
+    }
+
   return $rc
 # for dpkg, use dpkg -s <pkg name>
 }
 
+chk_cmd_exists()
+{
+  local rc=0
+  for cmd
+    do which $cmd > /dev/null 2>&1 || \
+      {
+        echo INFO: $cmd not found.
+        rc=$((rc+1))
+      }
+    done
+  [ $rc -le 255 ] || \
+    {
+      echo "WARNING: return value is greater than 255"
+      rc=255
+    }
+  return $rc
+}

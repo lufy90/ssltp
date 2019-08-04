@@ -19,10 +19,14 @@ clean(){
 
 chk_fs(){
   local t=$1
+  local xfsarg=
+  if [ $t == xfs ]; 
+  then xfsarg="-f"
+  fi
 
-  mkfs -t $t $blockdev 2> /dev/null || \
+  mkfs -t $t $xfsarg $blockdev 2> /dev/null || \
     {
-      echo mkfs -t $t FAILED
+      echo mkfs -t $t $xfsarg $blockdev FAILED
       return 1
     }
 
@@ -63,5 +67,6 @@ runfunc chk_fs ext3
 runfunc chk_fs ext4
 runfunc chk_fs vfat
 runfunc chk_fs msdos
+runfunc chk_fs xfs
+clean
 
-echo can get here??

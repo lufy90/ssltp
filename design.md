@@ -73,3 +73,10 @@ Kernel Version: 3.10.0-957.el7.isoft.x86_64
 Machine Architecture: x86_64
 Hostname: func-111
 ```
+
+
+## test results
+tag		result	passcount	failecount	funcount
+filesystem	PASS	5		0		5
+
+num	func	result	existcode

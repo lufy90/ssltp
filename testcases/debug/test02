@@ -16,3 +16,4 @@ func1()
 }
 
 runfunc chk_rpm_exists helo
+runfunc chk_rpm_exists ps bash

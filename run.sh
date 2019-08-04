@@ -1,4 +1,7 @@
 #!/bin/bash
+# run.sh
+# test engine for ssltp
+# by lufei at 20190616
 
 
 export PATH=$PATH:${PWD}/lib
@@ -21,11 +24,12 @@ runtest()
 {
   local tag=$1
   local cmd=$2
+  local FUNCNUM=0
 
   [ "${tag:0:1}" == "#" ] || \
   {
     echo "<<<test_start>>>"
-    echo tag=$tag stime=
+    echo tag=$tag stime=$(date +%s)
     echo cmdline=$cmd
     echo "<<<test_output>>>"
     bash $cmd
