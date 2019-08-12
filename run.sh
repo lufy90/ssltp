@@ -32,7 +32,21 @@ runtest()
     echo tag=$tag stime=$(date +%s)
     echo cmdline=$cmd
     echo "<<<test_output>>>"
-    bash $cmd
+    sleep $CASETIMEOUT &
+    local sleep_id=$!
+
+    bash $cmd &
+    local cmd_id=$!
+
+    while ps -p $cmd_id > /dev/null 2>&1
+      do
+        if [ "$(ps -p $sleep_id -o command=)" == "sleep $CASETIMEOUT" ]; then
+          sleep 0.5
+        else
+          kill -9 $cmd_id
+          echo Timeout accured.
+        fi
+      done
     echo "<<<execution_status>>>"
     echo "<<<test_end>>>"
   }

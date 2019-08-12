@@ -112,4 +112,7 @@ cp /proc/cmdline $infodir/
 cp /boot/grub/grub.cfg $infodir/
 
 # 20190802
-java -version > $infodir/java_-version
+java -version > $infodir/java_-version 2>&1
+
+# 20190805
+lvs > $infodir/lvs

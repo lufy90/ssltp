@@ -1,0 +1,80 @@
+#!/bin/bash
+# openmp 
+# Author: lufei
+# Date: 2019年 08月 12日 星期一 13:43:50 CST
+# 
+# run check point with  runfunc or run_key_func
+source common.sh
+source test.sh
+
+tmpdir=$TMPDIR/src
+
+createfile()
+{
+cat > $tmpdir/hello_omp.c << EOF
+# include <stdlib.h>
+# include <stdio.h>
+# include <omp.h>
+
+/* https://people.sc.fsu.edu/~jburkardt/c_src/hello_openmp/hello_openmp.c */
+int main ( int argc, char *argv[] )
+{
+  int id;
+  double wtime;
+
+  printf ( "\n" );
+  printf ( "HELLO_OPENMP\n" );
+  printf ( "  C/OpenMP version\n" );
+
+  printf ( "\n" );
+  printf ( "  Number of processors available = %d\n", omp_get_num_procs ( ) );
+  printf ( "  Number of threads =              %d\n", omp_get_max_threads ( ) );
+
+  wtime = omp_get_wtime ( );
+
+  printf ( "\n" );
+  printf ( "  OUTSIDE the parallel region.\n" );
+  printf ( "\n" );
+
+  id = omp_get_thread_num ( );
+  printf ( "  HELLO from process %d\n", id ) ;
+
+  printf ( "\n" );
+  printf ( "  Going INSIDE the parallel region:\n" );
+  printf ( "\n" );
+
+# pragma omp parallel \
+  private ( id )
+  {
+    id = omp_get_thread_num ( );
+    printf ("  Hello from process %d\n", id );
+  }
+  wtime = omp_get_wtime ( ) - wtime;
+
+  printf ( "\n" );
+  printf ( "  Back OUTSIDE the parallel region.\n" );
+  printf ( "\n" );
+  printf ( "HELLO_OPENMP\n" );
+  printf ( "  Normal end of execution.\n" );
+
+  printf ( "\n" );
+  printf ( "  Elapsed wall clock time = %f\n", wtime );
+
+  return 0;
+}
+
+EOF
+}
+
+clean()
+{
+rm -rf $tmpdir
+}
+
+run_key_func mkdir -p $tmpdir
+run_key_func cd $tmpdir
+run_key_func createfile
+
+runfunc cc hello_omp.c -o hello_omp -fopenmp
+runfunc ./hello_omp
+clean

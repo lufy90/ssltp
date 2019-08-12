@@ -1,0 +1,5 @@
+devenv testcases/functional/devenv
+libevent testcases/functional/libevent
+libsqlite testcases/functional/libsqlite
+openmpi testcases/functional/openmpi
+openmp testcases/functional/openmp

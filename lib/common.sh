@@ -4,8 +4,8 @@
 
 
 chk_rpm_exists()
-# check if rpm package installed, return count of NOT installed.
 {
+# check if rpm package installed, return count of NOT installed.
   local rc=0
   for pkg # in $@
     do rpm -q $pkg > /dev/null 2>&1 || \
@@ -41,3 +41,6 @@ chk_cmd_exists()
     }
   return $rc
 }
+
+# get block device size:
+# blockdev --getsize64 /dev/sdc7

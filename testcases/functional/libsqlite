@@ -1,0 +1,54 @@
+#!/bin/bash
+# libsqlite 
+# Author: lufei
+# Date: 2019年 08月 08日 星期四 16:58:50 CST
+# 
+# run check point with  runfunc or run_key_func
+source common.sh
+source test.sh
+tmpdir=$TMPDIR/src
+
+
+createfile()
+{
+  cat > $tmpdir/version.c << EOF
+#include <sqlite3.h>
+#include <stdio.h>
+// from http://zetcode.com/db/sqlitec/
+
+int main(void) {
+    
+    printf("%s\n", sqlite3_libversion()); 
+    
+    return 0;
+}
+EOF
+
+}
+
+check_version(){
+if [ $(./version) == $(sqlite3 -version | awk '{print $1}') ]; then 
+  echo get version: $(./version)
+  return 0
+else
+  echo "WARNING: get the wrong version"
+  return 1
+fi
+
+}
+
+clean()
+{
+rm -rf $tmpdir
+}
+
+run_key_func mkdir -p $tmpdir
+run_key_func cd $tmpdir
+
+run_key_func createfile
+
+runfunc gcc -o version version.c -lsqlite3
+
+runfunc check_version
+
+runfunc clean

@@ -1,0 +1,69 @@
+#!/bin/bash
+# libvirt 
+# Author: lufei
+# Date: 2019年 08月 12日 星期一 09:08:18 CST
+# 
+# run check point with  runfunc or run_key_func
+# create a tool for starting vm.
+# simply verify libvirt API of starting a vm.
+# 
+# Condition of running this test:
+# create a bootable virtual machine named 'testvm'
+
+source common.sh
+source test.sh
+
+
+tmpdir=$TMPDIR/src
+vmname=testvm
+
+createfile()
+{
+
+cat > $tmpdir/startvirt.c << EOF
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <libvirt/libvirt.h>
+
+static virConnectPtr conn = NULL;
+static virDomainPtr dom = NULL;
+
+int main(int ac, char *av[])
+{
+        if (ac != 2){
+                fprintf(stderr,"Usage:%s guestname.\n",av[0]);
+                exit(1);
+        }
+
+        conn = virConnectOpen("qemu:///system");
+        dom = virDomainLookupByName(conn, av[1]);
+
+        if (conn == NULL){
+                fprintf(stderr,"Open connection to qemu:///system FAILED.\n");
+                exit(2);
+        }
+
+        if (virDomainCreate(dom) != 0){
+                fprintf(stderr,"Start virt machine %s FAILED,please check guestname.\n",av[1]);
+                exit(3);
+        }
+
+        return 0;
+}
+EOF
+
+}
+
+clean(){
+
+rm -rf $tmpdir
+}
+
+run_key_func rpm_chk_exist openmpi openmpi-devel
+run_key_func mkdir -p $tmpdir
+run_key_func cd $tmpdir
+run_key_func createfile
+run_key_func gcc virtstart.c -o virtstart -lvirt
+runfunc ./virtstart $vmname 
+runfunc clean

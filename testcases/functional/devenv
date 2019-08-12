@@ -1,0 +1,124 @@
+#!/bin/bash
+# devenv 
+# Author: lufei
+# Date: 2019年 08月 08日 星期四 13:48:01 CST
+# 
+
+source common.sh
+source test.sh
+
+
+tmpdir=$TMPDIR
+src=$tmpdir/src
+filename=hello
+
+createfiles()
+{
+cat > $src/${filename}.c << EOF
+# include <stdio.h>
+
+int main(void){
+
+printf("Hello, world.\n");
+return 0;
+}
+EOF
+
+cat > $src/${filename}.cpp << EOF
+# include <iostream>
+
+using namespace std;
+int main(void){
+
+cout << "Hello, world.\n" ;
+return 0;
+
+}
+EOF
+
+cat > $src/${filename}.java << EOF
+public class hello {
+    public static void main(String[] args) {
+        System.out.println("Hello World");
+    }
+}
+
+EOF
+
+cat > $src/${filename}.php << EOF
+<?php
+
+echo "Hello World!\n" ;
+
+?>
+EOF
+
+cat > $src/${filename}.py << EOF
+print("Hello, world\n")
+
+EOF
+
+cat > $src/${filename}.pl << EOF
+#!/usr/bin/perl
+
+print "Hello World!/n";
+EOF
+
+cat > $src/${filename}.go << EOF
+package main
+
+import "fmt"
+
+func main() {
+	fmt.Println("Hello, world.")
+}
+EOF
+
+cat > $src/${filename}.sh << EOF
+#!/bin/bash
+printf "%s\\n" "Hello, world"
+EOF
+
+cat > $src/${filename}.lua << EOF
+function printHello(printString)
+    print(printString)
+end
+ 
+printHello("Hello World!")
+EOF
+
+}
+
+clean()
+{
+rm -rf $tmpdir
+}
+
+run_key_func mkdir -p $src
+run_key_func cd $src
+run_key_func createfiles
+runfunc cc ${filename}.c -o $filename
+runfunc ./$filename
+
+runfunc c++ ${filename}.cpp -o ${filename}cc
+runfunc ./${filename}cc
+
+runfunc javac ${filename}.java
+runfunc java $filename
+
+runfunc php ${filename}.php
+
+runfunc python ${filename}.py
+
+runfunc perl ${filename}.pl
+
+runfunc go run ${filename}.go
+
+runfunc bash ${filename}.sh
+
+runfunc lua ${filename}.lua
+
+
+clean
+
+

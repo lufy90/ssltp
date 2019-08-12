@@ -16,6 +16,7 @@ export SCENARIO_DIR=${SSLTPROOT}/scenarios
 export CASETIMEOUT=300
 export FUNCTIMEOUT=100
 export BLOCKDEV="/dev/sdx1"
+export BLOCKDEVFORCACHE="/dev/sdy1"
 export YUMREPO=
 
 export MNTPOINT=/tmp/ssltp_mntpoint
