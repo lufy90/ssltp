@@ -1,3 +1,0 @@
-command testcases/functional/commands.sh
-command testcases/functional/commands.sh a b c
-command testcases/functional/commands.sh a b c
