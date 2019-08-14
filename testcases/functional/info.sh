@@ -90,6 +90,7 @@ lshw -xml > $infodir/lshw_-xml
 lshw -json -dump $infodir/lshw.db > $infodir/lshw_-json
 dmidecode > $infodir/dmidecode
 dmidecode -u --dump-bin $infodir/dmidecode.bin
+dmidecode -q > $infodir/dmidecode_-q
 
 cp /etc/yum.repos.d -r $infodir/
 

@@ -21,3 +21,4 @@ export YUMREPO=
 
 export MNTPOINT=/tmp/ssltp_mntpoint
 export TMPDIR=/tmp/ssltp_tmpdir
+export IPADDR=$(hostname -I | awk '{print $1}')

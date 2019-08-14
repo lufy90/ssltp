@@ -1,0 +1,88 @@
+#!/bin/bash
+# soap 
+# Author: lufei
+# Date: 2019年 08月 14日 星期三 15:59:08 CST
+# 
+# run check point with  runfunc or run_key_func
+source common.sh
+source test.sh
+
+
+http_dir=/var/www/html/
+relative_dir=ssltptmpdir
+tmpdir=$http_dir/$relative_dir
+expect_msg="This is a test page for testing soap."
+
+if [ "X$IPADDR" == "X" ]; 
+  then
+  ipaddr=$(hostname -I | awk '{print $1}')
+  else ipaddr=$IPADDR
+fi
+
+
+createfile()
+{
+cat > $tmpdir/server.php << EOF
+<?php
+  require_once("info.php");
+  \$s = new SoapServer(null,array("uri"=>"server.php"));
+  \$s -> setClass("personinfo");
+  \$s -> handle();
+?>
+EOF
+
+cat > $tmpdir/client.php << EOF
+<?php
+  try {
+    \$soap = new SoapClient(null,array('location'=>"http://${ipaddr}/${relative_dir}/server.php",'uri'=>'server.php'));
+    \$results = \$soap->getName();
+    echo \$results;
+  }
+  catch(SoapFault \$e){
+    echo \$e->getMessage();
+  }
+  catch(Exception \$e){
+    echo \$e->getMessage();
+}
+?>
+EOF
+
+cat > $tmpdir/info.php << EOF
+<?php
+Class PersonInfo
+{
+  public function getName(){
+    return "$expect_msg";
+  }
+}
+?>
+EOF
+
+}
+
+tst_soap(){
+  local rcv_msg=$(curl $ipaddr/$relative_dir/client.php)
+  [ "$rcv_msg" == "$expect_msg" ] || \
+    {
+      echo "rcv_msg is $rcv_msg, not $expect_msg"
+      return 1
+    }
+  return 0
+}
+
+clean(){
+rm -rf $http_dir/$relative_dir
+}
+
+run_key_func chk_rpm_exists php-soap httpd
+run_key_func chk_service_up httpd
+
+mkdir -p $tmpdir || \
+  {
+    echo FAIL: mkdir -p $tmpdir failed.
+    exit 1
+  }
+
+runfunc createfile
+runfunc tst_soap
+clean
