@@ -1,2 +1,3 @@
-debug testcases/debug/test01
-debug testcases/debug/test02
+#debug testcases/debug/test01
+#debug testcases/debug/test02
+openssl testcases/functional/openssl

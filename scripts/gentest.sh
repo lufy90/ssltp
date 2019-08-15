@@ -15,7 +15,11 @@ gentest(){
 # Author: $USER
 # Date: $(date)
 # 
-# run check point with  runfunc or run_key_func
+# Attention: run check point with  runfunc or run_key_func
+# 
+# Description:
+# 
+
 source common.sh
 source test.sh
 

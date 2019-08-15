@@ -1,0 +1,58 @@
+#!/bin/bash
+# openssl 
+# Author: lufei
+# Date: 2019年 08月 15日 星期四 11:02:15 CST
+# 
+# Attention: run check point with  runfunc or run_key_func
+# 
+# Description:
+# fot ssl protocol test of OS. 
+
+
+source common.sh
+source test.sh
+
+tmpdir=$TMPDIR
+
+setup()
+{
+  mkdir -p $tmpdir || \
+    {
+      echo "FAIL: create $tmpdir failed."
+      return 1
+    }
+  cd $tmpdir || \
+    {
+      echo "FAIL: cd to $tmpdir failed."
+      return 1
+    }
+  yes '' | openssl req -new -x509 -keyout server.pem -out server.pem -days 365 -nodes || \
+    {
+      echo "FAIL: enerate server.pem failed."
+      return 2
+    }
+}
+
+s_connect()
+{
+  cd $tmpdir
+  timeout 5 openssl s_server 2>&1 > /dev/null &
+  sleep 1
+  openssl s_client -connect localhost:4433 | grep CONNECTED || \
+    {
+       echo pwd: $(pwd)
+       return 1
+    }
+  return 0
+}
+
+clean(){
+rm -rf $tmpdir
+}
+
+run_key_func setup
+# run_key_func yes '' | openssl req -new -x509 -keyout server.pem -out server.pem -days 365 -nodes
+# run_key_func timeout 10 openssl s_server
+runfunc s_connect
+
+clean

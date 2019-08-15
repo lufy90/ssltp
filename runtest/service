@@ -1,1 +1,2 @@
 soap testcases/functional/soap
+openssl testcases/functional/openssl
