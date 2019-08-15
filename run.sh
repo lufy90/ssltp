@@ -47,6 +47,7 @@ runtest()
           echo Timeout accured.
         fi
       done
+    kill -9 $sleep_id  > /dev/null 2>&1
     echo "<<<execution_status>>>"
     echo "<<<test_end>>>"
   }
