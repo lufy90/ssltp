@@ -20,8 +20,11 @@ clean(){
 chk_fs(){
   local t=$1
   local xfsarg=
+  local ntfsarg=
   if [ $t == xfs ]; 
   then xfsarg="-f"
+  elif [ $t == ntfs ];
+  then ntfsarg="--force"
   fi
 
   mkfs -t $t $xfsarg $blockdev 2> /dev/null || \
@@ -68,5 +71,6 @@ runfunc chk_fs ext4
 runfunc chk_fs vfat
 runfunc chk_fs msdos
 runfunc chk_fs xfs
+runfunc chk_fs ntfs
 clean
 

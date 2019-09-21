@@ -16,7 +16,7 @@ chk_rpm_exists()
     done
   [ $rc -le 255 ] || \
     {
-      echo "WARNING: return value is greater than 255"
+      echo "WARNING: return value is $rc."
       rc=255
     }
 

@@ -1,0 +1,59 @@
+#!/bin/bash
+# dmcache 
+# Author: lufei
+# Date: 2019年 09月 05日 星期四 17:41:08 CST
+# 
+# Attention: run check point with  runfunc or run_key_func
+# 
+# Description:
+# 
+
+source common.sh
+source test.sh
+
+func1()
+{
+: # Construct check porint func1 here
+
+}
+
+
+
+#
+#
+#
+# only a record on such environment.
+# and finally failed of such output when executing dmsetup create home-cached ...:
+# device-mapper: reload ioctl on cached  failed: Invalid or incomplete multibyte or wide character
+# Command failed.
+#
+# 
+# [root@test-201 ~]# lsblk
+# NAME            MAJ:MIN RM  SIZE RO TYPE MOUNTPOINT
+# sda               8:0    0   20G  0 disk 
+# ├─sda1            8:1    0    1G  0 part /boot
+# └─sda2            8:2    0   19G  0 part 
+#   ├─centos-root 253:0    0   17G  0 lvm  /
+#   └─centos-swap 253:1    0    2G  0 lvm  [SWAP]
+# sdb               8:16   0    5G  0 disk 
+# sdc               8:32   0   10G  0 disk 
+# └─sdc1            8:33   0  7.5G  0 part 
+# sdd               8:48   0    5G  0 disk 
+
+
+
+sdbsize=`lockdev --getsize64 /dev/sdb`
+metablocksize=`echo 4194304 + (16 \* $sdbsize / 262144) | bc`
+metablocksizeinsectors=`echo $metablocksize / 512 | bc`
+
+ssdblocksizeinsectors=`echo $sdbsize / 512 - $metablocksizeinsectors | bc`
+
+cacheddevsize=`blockdev --getsz /dev/sdc1`
+
+
+
+dmsetup create ssd-metadata --table '0 $metablocksizeinsectors linear /dev/sdb 0'
+dmsetup create ssd-blocks --table '0 $ssdblocksizeinsectors linear /dev/sdb 8832'
+dmsetup create home-cached --table '0 $cacheddevsize cache /dev/mapper/ssd-metadata /dev/mapper/ssd-blocks /dev/sdc1 512 1 writeback default 0'
+
+
