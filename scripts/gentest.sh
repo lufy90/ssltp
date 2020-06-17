@@ -25,7 +25,7 @@ source test.sh
 
 func1()
 {
-: # Construct check porint func1 here
+: # Construct check point func1 here
 
 }
 
